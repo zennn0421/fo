@@ -4,19 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>フォートナイト武器データベース</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <h1>フォートナイト武器データベース</h1>
-        <p>APIから最新の武器情報を取得して表示します。</p>
+        <h1>FORTNITE ARSENAL</h1>
+        <p>フォートナイト武器データベース</p>
+        
+        <div class="filters">
+            <select id="rarity-filter">
+                <option value="all">すべてのレアリティ</option>
+                <option value="common">コモン</option>
+                <option value="uncommon">アンコモン</option>
+                <option value="rare">レア</option>
+                <option value="epic">エピック</option>
+                <option value="legendary">レジェンダリー</option>
+                <option value="mythic">ミシック</option>
+            </select>
+            <select id="type-filter">
+                <option value="all">すべての武器種</option>
+                <option value="assault">アサルトライフル</option>
+                <option value="shotgun">ショットガン</option>
+                <option value="smg">サブマシンガン</option>
+                <option value="sniper">スナイパーライフル</option>
+                <option value="pistol">ピストル</option>
+            </select>
+        </div>
     </header>
 
     <main>
-        <div id="loading">データを読み込み中...</div>
+        <div id="loader" class="loader"></div>
         <div id="weapons-grid" class="weapons-container">
-            <!-- ここにJavaScriptで武器カードが挿入されます -->
+            <!-- JavaScriptで武器カードが挿入されます -->
         </div>
     </main>
 
@@ -26,4 +51,162 @@
 
     <script src="script.js"></script>
 </body>
-</html>
+</html>```
+
+#### 2. CSSファイル (`style.css`)
+
+デザインを大幅に刷新し、フィルタリングUIやローディングアニメーションのスタイルを追加しました。
+
+```css
+/* 基本スタイル */
+:root {
+    --bg-color: #0D1117;
+    --primary-color: #58A6FF;
+    --card-bg: #161B22;
+    --border-color: #30363D;
+    --text-color: #C9D1D9;
+    --text-secondary: #8B949E;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* フォント */
+h1, h2 {
+    font-family: 'Teko', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+/* ヘッダー */
+header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(180deg, rgba(22,27,34,1) 0%, rgba(13,17,23,0) 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+header h1 {
+    font-size: 4rem;
+    color: #fff;
+    margin: 0;
+    line-height: 1;
+}
+header p {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-top: 5px;
+}
+
+/* フィルター */
+.filters {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.filters select {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* メインコンテンツ */
+main {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ローディングアニメーション */
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 50px auto;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 武器コンテナ */
+.weapons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* 武器カード */
+.weapon-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+.weapon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.weapon-card .weapon-image {
+    width: 100%;
+    height: 150px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #0d1117;
+}
+
+.weapon-info {
+    padding: 20px;
+}
+.weapon-info h2 {
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: #fff;
+}
+.weapon-info p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 5px 0;
+}
+.weapon-info strong {
+    color: var(--text-color);
+}
+
+/* レアリティごとの色 */
+.rarity-common { border-left: 5px solid #b0b0b0; }
+.rarity-uncommon { border-left: 5px solid #38a138; }
+.rarity-rare { border-left: 5px solid #498ff5; }
+.rarity-epic { border-left: 5px solid #b942f5; }
+.rarity-legendary { border-left: 5px solid #f5a442; }
+.rarity-mythic { border-left: 5px solid #e8d32e; }
+
+/* フッター */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
